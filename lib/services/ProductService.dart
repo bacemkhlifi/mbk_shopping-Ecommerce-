@@ -7,6 +7,19 @@ class ProductService {
   //fetch prodcut by category 
   static const baseUrl = 'https://dummyjson.com/products/category';
 
+
+  static Future<List<Product>> fetchProductsByCategoryBeta(String category) async {
+    final response = await http.get(Uri.parse('$baseUrl/$category'));
+
+    if (response.statusCode == 200) {
+       final Map<String, dynamic> data = json.decode(response.body);
+      final List<dynamic> productsData = data['products'];
+      return productsData.map((product) => Product.fromJson(product)).toList();
+    } else {
+      throw Exception('Failed to fetch products for category $category');
+    }
+  }
+
   static Future<List<Product>> fetchProductsByCategory(String category) async {
     final response = await http.get(Uri.parse('$baseUrl/$category'));
 

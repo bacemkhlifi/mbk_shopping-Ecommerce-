@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:get/get.dart';
 
+import '../controllers/cart_controller.dart';
+import '../controllers/favorites_controller.dart';
 import '../models/product.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
-   final Product product;
-
+  final Product product;
+  final cartController = Get.put(CartController(), permanent: true);
+  final FavoriteController favoriteController = Get.find();
   ProductDetailsScreen({required this.product});
 
   @override
@@ -97,17 +101,33 @@ class ProductDetailsScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      // TODO: Implement favorite functionality
-                    },
-                    child: Text('Favorite'),
+                  Obx(()=>
+                     ElevatedButton(
+                      onPressed: () {
+                        if (favoriteController.isFavorite(product)) {
+                          favoriteController.removeFromFavorites(product);
+                        } else {
+                          favoriteController.addToFavorites(product);
+                        }
+                      },
+                      child: Row(
+                        children: [
+                         
+                          Text('Favorite'), Icon(
+                            favoriteController.isFavorite(product)
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: Colors.red,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      // TODO: Implement buy functionality
+                      cartController.addProduct(product);
                     },
-                    child: Text('Buy'),
+                    child: Text('Add to cart'),
                   ),
                 ],
               ),

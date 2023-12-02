@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mbkshopping/services/CategoryService.dart';
-import 'package:mbkshopping/widgets/theme.dart';
 import '../models/category_model.dart';
 import '../models/product.dart';
 import '../services/ProductService.dart';
+import 'homeAppScreen.dart';
 import 'productDetailsScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,147 +19,109 @@ class _HomePageState extends State<HomePage> {
   late Future<List<String>> categories;
   late Future<List<Product>> featuredProducts;
   late Future<List<Product>> recommendedProducts;
-  
+
   final List<CategoryStatic> categories_static = [
-  CategoryStatic(
-    title: "Men's\nFashion",
-    image: 'assets/categories/modehomme.jpg',
-  ),
-  CategoryStatic(
-    title: 'woman\nFashion',
-    image: 'assets/categories/modefemme.jpg',
-  ),
-  CategoryStatic(
-    title: 'Kids\nClothing',
-    image: 'assets/categories/modebaby.jpg',
-  ),
-  // Add more categories as needed
-];
+    CategoryStatic(
+      title: "Men's\nFashion",
+      image: 'assets/categories/modehomme.jpg',
+    ),
+    CategoryStatic(
+      title: 'woman\nFashion',
+      image: 'assets/categories/modefemme.jpg',
+    ),
+    CategoryStatic(
+      title: 'Kids\nClothing',
+      image: 'assets/categories/modebaby.jpg',
+    ),
+    // Add more categories as needed
+  ];
 
   @override
   void initState() {
     super.initState();
-    products = ProductService.fetchProducts();
-    categories = CategorieService.fetchCategories();
-    featuredProducts = ProductService.fetchFeaturedProducts();
-    recommendedProducts = ProductService.fetchRecommendedProducts();
+    refreshData();
+  }
+
+  Future<void> refreshData() async {
+    setState(() {
+      products = ProductService.fetchProducts();
+      categories = CategorieService.fetchCategories();
+      featuredProducts = ProductService.fetchFeaturedProducts();
+      recommendedProducts = ProductService.fetchRecommendedProducts();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.grey.shade200,
-              ),
-              child: TextFormField(
-                onChanged: (query) {
-                  // TODO: Implement search functionality
-                },
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Search for products...',
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.black,
+    return RefreshIndicator(
+      onRefresh: refreshData,
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.grey.shade200,
+                ),
+                child: TextFormField(
+                  style: TextStyle(color: Get.isDarkMode? Color.fromARGB(255, 255, 255, 255) : Colors.black),
+                  onChanged: (query) {
+                    // TODO: Implement search functionality
+                  },
+                  decoration: const InputDecoration(
+                    hintStyle: TextStyle(color: Colors.black),
+                    border: InputBorder.none,
+                    hintText: 'Search for products...',
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-         
-          Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-              'Categories',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-                      ),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Categories',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: categories_static.map((category) {
-                          return CategoryContainer(
-                            title: category.title,
-                            image: category.image,
-                            onTap: () {
-                              // Handle category tap action
-                            },
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-        
-         
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Featured Products',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: categories_static.map((category) {
+                      return CategoryContainer(
+                        title: category.title,
+                        image: category.image,
+                        onTap: () {
+                          
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
             ),
-          ),
-          FutureBuilder<List<Product>>(
-            future: recommendedProducts,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text('Error: ${snapshot.error}'),
-                );
-              }
-
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-
-              return ProductListView(products: snapshot.data!);
-            },
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'Recommended Products',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'Featured Products',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
-          FutureBuilder<List<Product>>(
-            future: featuredProducts,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text('Error: ${snapshot.error}'),
-                );
-              }
-
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-
-              return ProductListView(products: snapshot.data!);
-            },
-          ),
-          SizedBox(height: 16),
-          /* FutureBuilder<List<Product>>(
-              future: products,
+            FutureBuilder<List<Product>>(
+              future: recommendedProducts,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Center(
@@ -173,14 +135,63 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
 
-                return ProductListView(products: snapshot.data!.take(5).toList());
+                return ProductListView(products: snapshot.data!);
               },
-            ),*/
-        ],
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'Recommended Products',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            FutureBuilder<List<Product>>(
+              future: featuredProducts,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                return ProductListView(products: snapshot.data!);
+              },
+            ),
+            SizedBox(height: 16),
+            /* FutureBuilder<List<Product>>(
+                future: products,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text('Error: ${snapshot.error}'),
+                    );
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  return ProductListView(products: snapshot.data!.take(5).toList());
+                },
+              ),*/
+          ],
+        ),
       ),
     );
   }
 }
+
 
 class ProductListView extends StatelessWidget {
   final List<Product> products;
@@ -275,7 +286,9 @@ class CategoryContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => {
-       
+                
+              Get.offAll(() => HomeApp(), arguments: 1)
+                
       },
       child: Container(
         margin: const EdgeInsets.symmetric(

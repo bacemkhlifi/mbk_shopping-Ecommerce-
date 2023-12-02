@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mbkshopping/screens/productsByCategoryScreen.dart';
 import 'package:mbkshopping/widgets/theme.dart';
 
 class CategoryScreen extends StatelessWidget {
@@ -50,7 +52,7 @@ class CategoryScreen extends StatelessWidget {
                 return Card(
                   child: InkWell(
                     onTap: () {
-                      // TODO: Handle tap on category (navigate to category details, etc.)
+                     Get.to(() => ProductsCategory(), arguments: category["name"]);
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
