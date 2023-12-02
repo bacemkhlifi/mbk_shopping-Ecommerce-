@@ -1,16 +1,8 @@
 # mbkshopping
 
-A new Flutter project.
+MBKShopping is a feature-rich e-commerce mobile application designed to enhance your online shopping experience. Discover a vast selection of products, seamlessly add items to your cart, and mark your favorites for easy access. Enjoy personalized product recommendations, effortlessly manage your profile, and benefit from a user-friendly interface. With secure payment options and intuitive navigation, MBKShopping ensures a convenient and enjoyable e-commerce journey for users looking to explore, shop, and save with ease.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+![MBKShopping App Screenshot](assets/1577120B-2F86-47D5-8793-BD6828033A50.jpeg)
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
