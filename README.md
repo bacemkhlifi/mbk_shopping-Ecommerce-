@@ -15,7 +15,7 @@ MBKShopping is a feature-rich e-commerce mobile application designed to enhance 
 
 </p>
 <p align="center">
-<img src="assets/A725708B-D691-47E7-AEA2-D8EC24EF014D.jpeg.jpeg" alt="MBKShopping App Screenshot" width="300"/>
+<img src="assets/A725708B-D691-47E7-AEA2-D8EC24EF014D.jpeg"  width="300"/>
 <img src="assets/A844CF63-6AC2-4EC2-9F30-632376492B21.jpeg" alt="MBKShopping App Screenshot" width="300"/>
 <img src="assets/C6333035-5AF4-46FF-BD60-A66DCEBC4827.jpeg" alt="MBKShopping App Screenshot" width="300"/>
 
